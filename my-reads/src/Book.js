@@ -1,6 +1,15 @@
 import React from "react";
 
-export const Book = ({bookInfo}) => {
+export const Book = ({bookInfo,updateBook}) => {
+
+    const handelChange=(e,id)=>{
+        let value=e.target.value
+        if(value!=='none'){
+            console.log('Book ',value,id)
+            updateBook(value,id)
+        }
+       
+    }
   return (
     <>
     <li  key={bookInfo.id}>
@@ -16,7 +25,7 @@ export const Book = ({bookInfo}) => {
             }}
           ></div>
           <div className="book-shelf-changer">
-            <select>
+            <select value={bookInfo.shelf} onChange={(e)=>{handelChange(e,bookInfo.id)}}>
               <option value="none" disabled>
                 Move to...
               </option>

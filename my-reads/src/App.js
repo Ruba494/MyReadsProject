@@ -6,17 +6,34 @@ import BookShelf from "./BookShelf";
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
   const [books, setBooks] = useState([]);
+  const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState([]);
+  const [readBooks, setReadBooks] = useState([]);
+  const [wantToReadBooks, setWantToReadBooks] = useState([]);
 
   useEffect(() => {
     const getBooks = async () => {
       const res = await BooksAPI.getAll();
-      setBooks(res);
+      updateBooks(res)
     };
     getBooks();
   }, []);
 
-  const getBooksOfCategory=(cat)=>{
-    return books.filter(book => book.shelf === cat)
+
+  const updateBookShelf = (newShelf, id) => {
+    let newBook = books.findIndex((book) => book.id === id);
+    BooksAPI.update(newBook, newShelf).then(() => {
+      books[newBook].shelf = newShelf;
+      updateBooks(books)
+    });
+  
+  };
+
+
+  const updateBooks=(books)=>{
+    setBooks(books);
+    setCurrentlyReadingBooks(books.filter((book) => book.shelf === 'currentlyReading'))
+    setReadBooks(books.filter((book) => book.shelf === 'read'))
+    setWantToReadBooks(books.filter((book) => book.shelf === 'wantToRead'))
   }
   return (
     <div className="app">
@@ -25,9 +42,21 @@ function App() {
           <h1>MyReads</h1>
         </div>
         <div className="list-books-content">
-              <BookShelf books={getBooksOfCategory('currentlyReading')} category="currentlyReading" />
-              <BookShelf books={getBooksOfCategory('read')} category="read" />
-              <BookShelf books={getBooksOfCategory('wantToRead')} category="wantToRead" />
+          <BookShelf
+            books={currentlyReadingBooks}
+            category="currentlyReading"
+            updateBook={updateBookShelf}
+          />
+          <BookShelf
+            books={readBooks}
+            category="read"
+            updateBook={updateBookShelf}
+          />
+          <BookShelf
+            books={wantToReadBooks}
+            category="wantToRead"
+            updateBook={updateBookShelf}
+          />
         </div>
       </div>
     </div>

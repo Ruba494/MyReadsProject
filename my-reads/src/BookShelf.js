@@ -1,7 +1,8 @@
 import React from "react";
 import Book from "./Book";
 
-export const BookShelf = ({ books, category }) => {
+export const BookShelf = ({ books, category , updateBook}) => {
+   
   return (
     <>
       <div className="bookshelf">
@@ -9,7 +10,7 @@ export const BookShelf = ({ books, category }) => {
         <div className="bookshelf-books">
           <ol className="books-grid">
             {books.map((book) => (
-                <Book bookInfo={book} />
+                <Book bookInfo={book} updateBook={updateBook}/>
             ))}
           </ol>
         </div>
