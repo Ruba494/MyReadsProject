@@ -1,7 +1,9 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
-import BookShelf from "./BookShelf";
+import ShelfList from "./ShelfList";
+import SearchBook from "./SearchBook";
 
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
@@ -13,51 +15,76 @@ function App() {
   useEffect(() => {
     const getBooks = async () => {
       const res = await BooksAPI.getAll();
-      updateBooks(res)
+      updateBooks(res);
     };
     getBooks();
   }, []);
 
-
   const updateBookShelf = (newShelf, id) => {
     let newBook = books.findIndex((book) => book.id === id);
-    BooksAPI.update(newBook, newShelf).then(() => {
-      books[newBook].shelf = newShelf;
-      updateBooks(books)
+   
+    if(newBook<0){
+      BooksAPI.get(id).then((book) => {
+        updateBooks(books.concat(book))
+        newBook = books.findIndex((book) => book.id === id);
+          });
+      // updateBooks(books.concat(b))
+    }
+    console.log(books)
+      BooksAPI.update(books[newBook], newShelf).then(() => {
+        books[newBook].shelf = newShelf;
+        updateBooks(books)
+    
     });
-  
+
   };
 
+  const getBook = async (id) => {
+    const res = await BooksAPI.get(id);
+    return res
+  };
 
-  const updateBooks=(books)=>{
+  // const updateBookShelf = (newShelf, id) => {
+  //   const book = getBook(id);
+  //   console,log()
+  //   BooksAPI.update(book, newShelf).then(() => {
+  //     book.shelf = newShelf;
+  //     updateBooks(books);
+  //   });
+  // };
+
+  const updateBooks = (books) => {
     setBooks(books);
-    setCurrentlyReadingBooks(books.filter((book) => book.shelf === 'currentlyReading'))
-    setReadBooks(books.filter((book) => book.shelf === 'read'))
-    setWantToReadBooks(books.filter((book) => book.shelf === 'wantToRead'))
-  }
+    setCurrentlyReadingBooks(
+      books.filter((book) => book.shelf === "currentlyReading")
+    );
+    setReadBooks(books.filter((book) => book.shelf === "read"));
+    setWantToReadBooks(books.filter((book) => book.shelf === "wantToRead"));
+  };
+
   return (
     <div className="app">
       <div className="list-books">
-        <div className="list-books-title">
-          <h1>MyReads</h1>
-        </div>
-        <div className="list-books-content">
-          <BookShelf
-            books={currentlyReadingBooks}
-            category="currentlyReading"
-            updateBook={updateBookShelf}
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <ShelfList
+                currentlyReadingBooks={currentlyReadingBooks}
+                readBooks={readBooks}
+                wantToReadBooks={wantToReadBooks}
+                updateBookShelf={updateBookShelf}
+              />
+            }
           />
-          <BookShelf
-            books={readBooks}
-            category="read"
-            updateBook={updateBookShelf}
+          <Route
+            path="/search"
+            element={
+              <SearchBook books={books} updateBookShelf={updateBookShelf} />
+            }
           />
-          <BookShelf
-            books={wantToReadBooks}
-            category="wantToRead"
-            updateBook={updateBookShelf}
-          />
-        </div>
+        </Routes>
       </div>
     </div>
   );

@@ -1,15 +1,15 @@
 import React from "react";
+import * as BooksAPI from "./BooksAPI";
 
-export const Book = ({bookInfo,updateBook}) => {
+export const Book = ({allBooks,bookInfo,updateBook}) => {
 
     const handelChange=(e,id)=>{
         let value=e.target.value
-        if(value!=='none'){
-            console.log('Book ',value,id)
-            updateBook(value,id)
-        }
-       
+        updateBook(value,id)
     }
+    let newBook = allBooks.findIndex((book) => book.id === bookInfo.id);
+    console.log(allBooks[newBook]?.shelf)
+   
   return (
     <>
     <li  key={bookInfo.id}>
@@ -25,8 +25,8 @@ export const Book = ({bookInfo,updateBook}) => {
             }}
           ></div>
           <div className="book-shelf-changer">
-            <select value={bookInfo.shelf} onChange={(e)=>{handelChange(e,bookInfo.id)}}>
-              <option value="none" disabled>
+            <select value={bookInfo?.shelf||'none'} onChange={(e)=>{handelChange(e,bookInfo.id)}}>
+              <option value="disabled" disabled>
                 Move to...
               </option>
               <option value="currentlyReading">Currently Reading</option>
