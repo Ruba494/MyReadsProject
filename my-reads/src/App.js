@@ -6,7 +6,6 @@ import ShelfList from "./ShelfList";
 import SearchBook from "./SearchBook";
 
 function App() {
-  const [showSearchPage, setShowSearchpage] = useState(false);
   const [books, setBooks] = useState([]);
   const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState([]);
   const [readBooks, setReadBooks] = useState([]);
@@ -20,38 +19,12 @@ function App() {
     getBooks();
   }, []);
 
-  const updateBookShelf = (newShelf, id) => {
+  const updateBookShelf = async (newShelf, id) => {
     let newBook = books.findIndex((book) => book.id === id);
-   
-    if(newBook<0){
-      BooksAPI.get(id).then((book) => {
-        updateBooks(books.concat(book))
-        newBook = books.findIndex((book) => book.id === id);
-          });
-      // updateBooks(books.concat(b))
-    }
-    console.log(books)
-      BooksAPI.update(books[newBook], newShelf).then(() => {
-        books[newBook].shelf = newShelf;
-        updateBooks(books)
-    
-    });
-
+    await BooksAPI.update(books[newBook], newShelf);
+    books[newBook].shelf = newShelf;
+    updateBooks(books);
   };
-
-  const getBook = async (id) => {
-    const res = await BooksAPI.get(id);
-    return res
-  };
-
-  // const updateBookShelf = (newShelf, id) => {
-  //   const book = getBook(id);
-  //   console,log()
-  //   BooksAPI.update(book, newShelf).then(() => {
-  //     book.shelf = newShelf;
-  //     updateBooks(books);
-  //   });
-  // };
 
   const updateBooks = (books) => {
     setBooks(books);

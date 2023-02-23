@@ -8,33 +8,24 @@ export const SearchBook = ({ books, updateBookShelf }) => {
   const [searchedBooks, setSearchedBooks] = useState([]);
 
   const updateQuery = (query) => {
-    if(query!==''){
-        BooksAPI.search(query, 100).then((res) => {
-            console.log(res);
-            if(res.error!=="empty query"){
-                setSearchedBooks(books.concat(res));
-            }
-            setQuery(query.trim());
-          });
-    }else{
-        setQuery('')
-        setSearchedBooks([]);
+    if (query !== "") {
+      BooksAPI.search(query, 100).then((res) => {
+        if (res.error !== "empty query") {
+          setSearchedBooks(res);
+        }
+        setQuery(query.trim());
+      });
+    } else {
+      setQuery("");
+      setSearchedBooks([]);
     }
   };
-
-  const updateHandler=(id)=>{
-    
-    updateBookShelf()
-  }
 
   const showingBooks =
     query === ""
       ? searchedBooks
-      : searchedBooks.filter((book) =>
-          book.title.toLowerCase().includes(query.toLowerCase())
-        ).sort((a, b) => a.title- b.title);
+      : searchedBooks.sort((a, b) => a.title- b.title);
 
-        console.log('showingBooks',showingBooks.length,'allbooks',books.length)
   return (
     <>
       <div className="search-books">
@@ -55,7 +46,12 @@ export const SearchBook = ({ books, updateBookShelf }) => {
         <div className="search-books-results">
           <ol className="books-grid">
             {(showingBooks || []).map((book) => (
-              <Book allBooks={books} bookInfo={book} updateBook={updateBookShelf} />
+              <Book
+                key={book.id}
+                allBooks={books}
+                bookInfo={book}
+                updateBook={updateBookShelf}
+              />
             ))}
           </ol>
         </div>
