@@ -2,8 +2,8 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
-import ShelfList from "./ShelfList";
-import SearchBook from "./SearchBook";
+import ShelfList from "./Components/ShelfList";
+import SearchBook from "./Components/SearchBook";
 
 function App() {
   const [books, setBooks] = useState([]);

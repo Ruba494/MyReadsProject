@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import { Link } from "react-router-dom";
-import * as BooksAPI from "./BooksAPI";
+import * as BooksAPI from "../BooksAPI";
 import Book from "./Book";
 
 export const SearchBook = ({ books, updateBookShelf }) => {
@@ -24,7 +24,7 @@ export const SearchBook = ({ books, updateBookShelf }) => {
   const showingBooks =
     query === ""
       ? searchedBooks
-      : searchedBooks.sort((a, b) => a.title- b.title);
+      : searchedBooks.sort((a, b) => a.title - b.title);
 
   return (
     <>

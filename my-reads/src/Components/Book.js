@@ -1,8 +1,7 @@
 import React from "react";
-import * as BooksAPI from "./BooksAPI";
+import * as BooksAPI from "../BooksAPI";
 
 export const Book = ({ allBooks, bookInfo, updateBook }) => {
-
   const handleShelfChange = async (e, id) => {
     let newShelf = e.target.value;
     const book = await BooksAPI.get(id);
@@ -13,7 +12,6 @@ export const Book = ({ allBooks, bookInfo, updateBook }) => {
     updateBook(newShelf, id);
   };
 
-console.log(bookInfo)
   return (
     <>
       <li key={bookInfo.id}>
@@ -35,7 +33,7 @@ console.log(bookInfo)
                   "none"
                 }
                 onChange={(e) => {
-                handleShelfChange(e, bookInfo.id);
+                  handleShelfChange(e, bookInfo.id);
                 }}
               >
                 <option value="disabled" disabled>
