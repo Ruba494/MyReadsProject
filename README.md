@@ -1,5 +1,5 @@
 # MyReads Project
-This is the final assessment project for Udacity's React Fundamentals course. it's a bookshelf app that allows you to select and categorize books you have read, are currently reading, or want to read. Also search and add new books to your bookshelfs.xs
+This is the final assessment project for Udacity's React Fundamentals course. it's a bookshelf app that allows you to select and categorize books you have read, are currently reading, or want to read. Also search and add new books to your bookshelfs
 
 ## Install and start
 - navigate to my-reads folder `cd my-reads`
