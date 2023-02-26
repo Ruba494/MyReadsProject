@@ -8,7 +8,9 @@ export const SearchBook = ({ books, updateBookShelf }) => {
   const [searchedBooks, setSearchedBooks] = useState([]);
 
   const updateQuery = (query) => {
-    if (query !== "") {
+    const hasAbcd=(query.toLowerCase()).includes('abcd');
+    const hasNumbers = /\d/;
+    if (query !== "" && !hasAbcd && !hasNumbers.test(query)) {
       BooksAPI.search(query, 100).then((res) => {
         if (res.error !== "empty query") {
           setSearchedBooks(res);
